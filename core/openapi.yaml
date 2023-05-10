@@ -1,0 +1,56 @@
+openapi: 3.0.1
+
+info:
+  title: API specification for core module
+  version: v1.0.0
+
+paths:
+  /modules:
+    get:
+      responses:
+        200:
+          $ref: '#/components/responses/ModulesResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+components:
+  schemas:
+    Module:
+      type: object
+      required: [ name,base_path ]
+      properties:
+        name:
+          type: string
+          example: entity-crud
+        base_path:
+          type: string
+          example: /entity-crud
+    Error:
+      type: object
+      required: [ code,message ]
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+        display_message:
+          type: string
+          example: Well, I have tried, but nothing found
+
+  responses:
+    ModulesResponse:
+      description: Set of connected modules
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Module'
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
