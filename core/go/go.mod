@@ -1,4 +1,4 @@
-module github.com/goadify/openapi/core/go/gen
+module github.com/goadify/openapi/core/go
 
 go 1.20
 
