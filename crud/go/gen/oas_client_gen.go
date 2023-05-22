@@ -12,9 +12,11 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
+	"github.com/ogen-go/ogen/otelogen"
 	"github.com/ogen-go/ogen/uri"
 )
 
@@ -70,19 +72,21 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// EntityMappingsGet invokes GET /entity_mappings operation.
+// CreateRecord invokes CreateRecord operation.
 //
-// Returns a mappings of loaded entities.
+// Creates record.
 //
-// GET /entity_mappings
-func (c *Client) EntityMappingsGet(ctx context.Context) ([]EntityMapping, error) {
-	res, err := c.sendEntityMappingsGet(ctx)
+// POST /entity/{name}
+func (c *Client) CreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (*Entity, error) {
+	res, err := c.sendCreateRecord(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendEntityMappingsGet(ctx context.Context) (res []EntityMapping, err error) {
-	var otelAttrs []attribute.KeyValue
+func (c *Client) sendCreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (res *Entity, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("CreateRecord"),
+	}
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -95,7 +99,209 @@ func (c *Client) sendEntityMappingsGet(ctx context.Context) (res []EntityMapping
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "EntityMappingsGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "CreateRecord",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/entity/"
+	{
+		// Encode "name" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "name",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.Name))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeCreateRecordRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeCreateRecordResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// DeleteRecordById invokes DeleteRecordById operation.
+//
+// Deletes record.
+//
+// DELETE /entity/{name}/{id}
+func (c *Client) DeleteRecordById(ctx context.Context, request *Entity, params DeleteRecordByIdParams) error {
+	res, err := c.sendDeleteRecordById(ctx, request, params)
+	_ = res
+	return err
+}
+
+func (c *Client) sendDeleteRecordById(ctx context.Context, request *Entity, params DeleteRecordByIdParams) (res *NoContent, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("DeleteRecordById"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, elapsedDuration.Microseconds(), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteRecordById",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/entity/"
+	{
+		// Encode "name" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "name",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.Name))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeDeleteRecordByIdRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeDeleteRecordByIdResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetEntityMappings invokes GetEntityMappings operation.
+//
+// Returns a mappings of loaded entities.
+//
+// GET /entity_mappings
+func (c *Client) GetEntityMappings(ctx context.Context) ([]EntityMapping, error) {
+	res, err := c.sendGetEntityMappings(ctx)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendGetEntityMappings(ctx context.Context) (res []EntityMapping, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("GetEntityMappings"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, elapsedDuration.Microseconds(), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "GetEntityMappings",
+		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
 	// Track stage for error reporting.
@@ -129,7 +335,7 @@ func (c *Client) sendEntityMappingsGet(ctx context.Context) (res []EntityMapping
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeEntityMappingsGetResponse(resp)
+	result, err := decodeGetEntityMappingsResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -137,19 +343,21 @@ func (c *Client) sendEntityMappingsGet(ctx context.Context) (res []EntityMapping
 	return result, nil
 }
 
-// EntityNameGet invokes GET /entity/{name} operation.
+// GetRecordById invokes GetRecordById operation.
 //
-// Retrieves records with pagination.
+// Retrieves one record by identifier.
 //
-// GET /entity/{name}
-func (c *Client) EntityNameGet(ctx context.Context, params EntityNameGetParams) (*EntitiesResponse, error) {
-	res, err := c.sendEntityNameGet(ctx, params)
+// GET /entity/{name}/{id}
+func (c *Client) GetRecordById(ctx context.Context, params GetRecordByIdParams) (*Entity, error) {
+	res, err := c.sendGetRecordById(ctx, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendEntityNameGet(ctx context.Context, params EntityNameGetParams) (res *EntitiesResponse, err error) {
-	var otelAttrs []attribute.KeyValue
+func (c *Client) sendGetRecordById(ctx context.Context, params GetRecordByIdParams) (res *Entity, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("GetRecordById"),
+	}
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -162,7 +370,115 @@ func (c *Client) sendEntityNameGet(ctx context.Context, params EntityNameGetPara
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "EntityNameGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "GetRecordById",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/entity/"
+	{
+		// Encode "name" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "name",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.Name))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetRecordByIdResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetRecords invokes GetRecords operation.
+//
+// Retrieves records with pagination.
+//
+// GET /entity/{name}
+func (c *Client) GetRecords(ctx context.Context, params GetRecordsParams) (*EntitiesResponse, error) {
+	res, err := c.sendGetRecords(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (res *EntitiesResponse, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("GetRecords"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, elapsedDuration.Microseconds(), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "GetRecords",
+		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
 	// Track stage for error reporting.
@@ -252,7 +568,7 @@ func (c *Client) sendEntityNameGet(ctx context.Context, params EntityNameGetPara
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeEntityNameGetResponse(resp)
+	result, err := decodeGetRecordsResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -260,230 +576,21 @@ func (c *Client) sendEntityNameGet(ctx context.Context, params EntityNameGetPara
 	return result, nil
 }
 
-// EntityNameIDDelete invokes DELETE /entity/{name}/{id} operation.
-//
-// Deletes record.
-//
-// DELETE /entity/{name}/{id}
-func (c *Client) EntityNameIDDelete(ctx context.Context, request *Entity, params EntityNameIDDeleteParams) error {
-	res, err := c.sendEntityNameIDDelete(ctx, request, params)
-	_ = res
-	return err
-}
-
-func (c *Client) sendEntityNameIDDelete(ctx context.Context, request *Entity, params EntityNameIDDeleteParams) (res *NoContent, err error) {
-	var otelAttrs []attribute.KeyValue
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "EntityNameIDDelete",
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [4]string
-	pathParts[0] = "/entity/"
-	{
-		// Encode "name" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "name",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.Name))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[3] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeEntityNameIDDeleteRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeEntityNameIDDeleteResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// EntityNameIDGet invokes GET /entity/{name}/{id} operation.
-//
-// Retrieves one record by identifier.
-//
-// GET /entity/{name}/{id}
-func (c *Client) EntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) (*Entity, error) {
-	res, err := c.sendEntityNameIDGet(ctx, params)
-	_ = res
-	return res, err
-}
-
-func (c *Client) sendEntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) (res *Entity, err error) {
-	var otelAttrs []attribute.KeyValue
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "EntityNameIDGet",
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [4]string
-	pathParts[0] = "/entity/"
-	{
-		// Encode "name" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "name",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.Name))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[3] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeEntityNameIDGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// EntityNameIDPut invokes PUT /entity/{name}/{id} operation.
+// UpdateRecordById invokes UpdateRecordById operation.
 //
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (c *Client) EntityNameIDPut(ctx context.Context, request *Entity, params EntityNameIDPutParams) (*Entity, error) {
-	res, err := c.sendEntityNameIDPut(ctx, request, params)
+func (c *Client) UpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (*Entity, error) {
+	res, err := c.sendUpdateRecordById(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendEntityNameIDPut(ctx context.Context, request *Entity, params EntityNameIDPutParams) (res *Entity, err error) {
-	var otelAttrs []attribute.KeyValue
+func (c *Client) sendUpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (res *Entity, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("UpdateRecordById"),
+	}
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -496,7 +603,8 @@ func (c *Client) sendEntityNameIDPut(ctx context.Context, request *Entity, param
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "EntityNameIDPut",
+	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateRecordById",
+		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
 	// Track stage for error reporting.
@@ -558,7 +666,7 @@ func (c *Client) sendEntityNameIDPut(ctx context.Context, request *Entity, param
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeEntityNameIDPutRequest(request, r); err != nil {
+	if err := encodeUpdateRecordByIdRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -570,95 +678,7 @@ func (c *Client) sendEntityNameIDPut(ctx context.Context, request *Entity, param
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeEntityNameIDPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// EntityNamePost invokes POST /entity/{name} operation.
-//
-// Creates record.
-//
-// POST /entity/{name}
-func (c *Client) EntityNamePost(ctx context.Context, request *Entity, params EntityNamePostParams) (*Entity, error) {
-	res, err := c.sendEntityNamePost(ctx, request, params)
-	_ = res
-	return res, err
-}
-
-func (c *Client) sendEntityNamePost(ctx context.Context, request *Entity, params EntityNamePostParams) (res *Entity, err error) {
-	var otelAttrs []attribute.KeyValue
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "EntityNamePost",
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/entity/"
-	{
-		// Encode "name" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "name",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.Name))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeEntityNamePostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeEntityNamePostResponse(resp)
+	result, err := decodeUpdateRecordByIdResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

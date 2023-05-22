@@ -74,11 +74,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleEntityNameGetRequest([1]string{
+						s.handleGetRecordsRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleEntityNamePostRequest([1]string{
+						s.handleCreateRecordRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -104,17 +104,17 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "DELETE":
-							s.handleEntityNameIDDeleteRequest([2]string{
+							s.handleDeleteRecordByIdRequest([2]string{
 								args[0],
 								args[1],
 							}, elemIsEscaped, w, r)
 						case "GET":
-							s.handleEntityNameIDGetRequest([2]string{
+							s.handleGetRecordByIdRequest([2]string{
 								args[0],
 								args[1],
 							}, elemIsEscaped, w, r)
 						case "PUT":
-							s.handleEntityNameIDPutRequest([2]string{
+							s.handleUpdateRecordByIdRequest([2]string{
 								args[0],
 								args[1],
 							}, elemIsEscaped, w, r)
@@ -136,7 +136,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleEntityMappingsGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleGetEntityMappingsRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -243,15 +243,15 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "EntityNameGet"
-						r.operationID = ""
+						r.name = "GetRecords"
+						r.operationID = "GetRecords"
 						r.pathPattern = "/entity/{name}"
 						r.args = args
 						r.count = 1
 						return r, true
 					case "POST":
-						r.name = "EntityNamePost"
-						r.operationID = ""
+						r.name = "CreateRecord"
+						r.operationID = "CreateRecord"
 						r.pathPattern = "/entity/{name}"
 						r.args = args
 						r.count = 1
@@ -276,25 +276,25 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "DELETE":
-							// Leaf: EntityNameIDDelete
-							r.name = "EntityNameIDDelete"
-							r.operationID = ""
+							// Leaf: DeleteRecordById
+							r.name = "DeleteRecordById"
+							r.operationID = "DeleteRecordById"
 							r.pathPattern = "/entity/{name}/{id}"
 							r.args = args
 							r.count = 2
 							return r, true
 						case "GET":
-							// Leaf: EntityNameIDGet
-							r.name = "EntityNameIDGet"
-							r.operationID = ""
+							// Leaf: GetRecordById
+							r.name = "GetRecordById"
+							r.operationID = "GetRecordById"
 							r.pathPattern = "/entity/{name}/{id}"
 							r.args = args
 							r.count = 2
 							return r, true
 						case "PUT":
-							// Leaf: EntityNameIDPut
-							r.name = "EntityNameIDPut"
-							r.operationID = ""
+							// Leaf: UpdateRecordById
+							r.name = "UpdateRecordById"
+							r.operationID = "UpdateRecordById"
 							r.pathPattern = "/entity/{name}/{id}"
 							r.args = args
 							r.count = 2
@@ -314,9 +314,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: EntityMappingsGet
-						r.name = "EntityMappingsGet"
-						r.operationID = ""
+						// Leaf: GetEntityMappings
+						r.name = "GetEntityMappings"
+						r.operationID = "GetEntityMappings"
 						r.pathPattern = "/entity_mappings"
 						r.args = args
 						r.count = 0

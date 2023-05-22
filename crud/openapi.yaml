@@ -7,6 +7,7 @@ info:
 paths:
   /entity_mappings:
     get:
+      operationId: GetEntityMappings
       description: Returns a mappings of loaded entities
       responses:
         200:
@@ -16,6 +17,7 @@ paths:
 
   /entity/{name}:
     post:
+      operationId: CreateRecord
       description: Creates record
       parameters:
         - $ref: '#/components/parameters/EntityName'
@@ -27,6 +29,7 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
     get:
+      operationId: GetRecords
       description: Retrieves records with pagination
       parameters:
         - $ref: '#/components/parameters/EntityName'
@@ -41,6 +44,7 @@ paths:
 
   /entity/{name}/{id}:
     get:
+      operationId: GetRecordById
       description: Retrieves one record by identifier
       parameters:
         - $ref: '#/components/parameters/EntityName'
@@ -52,6 +56,7 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
     put:
+      operationId: UpdateRecordById
       description: Updates existing record
       parameters:
         - $ref: '#/components/parameters/EntityName'
@@ -64,6 +69,7 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
     delete:
+      operationId: DeleteRecordById
       description: Deletes record
       parameters:
         - $ref: '#/components/parameters/EntityName'

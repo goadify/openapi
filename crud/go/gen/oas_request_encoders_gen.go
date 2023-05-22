@@ -11,7 +11,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeEntityNameIDDeleteRequest(
+func encodeCreateRecordRequest(
 	req *Entity,
 	r *http.Request,
 ) error {
@@ -25,7 +25,7 @@ func encodeEntityNameIDDeleteRequest(
 	return nil
 }
 
-func encodeEntityNameIDPutRequest(
+func encodeDeleteRecordByIdRequest(
 	req *Entity,
 	r *http.Request,
 ) error {
@@ -39,7 +39,7 @@ func encodeEntityNameIDPutRequest(
 	return nil
 }
 
-func encodeEntityNamePostRequest(
+func encodeUpdateRecordByIdRequest(
 	req *Entity,
 	r *http.Request,
 ) error {

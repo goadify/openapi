@@ -13,57 +13,57 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// EntityMappingsGet implements GET /entity_mappings operation.
-//
-// Returns a mappings of loaded entities.
-//
-// GET /entity_mappings
-func (UnimplementedHandler) EntityMappingsGet(ctx context.Context) (r []EntityMapping, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// EntityNameGet implements GET /entity/{name} operation.
-//
-// Retrieves records with pagination.
-//
-// GET /entity/{name}
-func (UnimplementedHandler) EntityNameGet(ctx context.Context, params EntityNameGetParams) (r *EntitiesResponse, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// EntityNameIDDelete implements DELETE /entity/{name}/{id} operation.
-//
-// Deletes record.
-//
-// DELETE /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDDelete(ctx context.Context, req *Entity, params EntityNameIDDeleteParams) error {
-	return ht.ErrNotImplemented
-}
-
-// EntityNameIDGet implements GET /entity/{name}/{id} operation.
-//
-// Retrieves one record by identifier.
-//
-// GET /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) (r *Entity, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// EntityNameIDPut implements PUT /entity/{name}/{id} operation.
-//
-// Updates existing record.
-//
-// PUT /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req *Entity, params EntityNameIDPutParams) (r *Entity, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// EntityNamePost implements POST /entity/{name} operation.
+// CreateRecord implements CreateRecord operation.
 //
 // Creates record.
 //
 // POST /entity/{name}
-func (UnimplementedHandler) EntityNamePost(ctx context.Context, req *Entity, params EntityNamePostParams) (r *Entity, _ error) {
+func (UnimplementedHandler) CreateRecord(ctx context.Context, req *Entity, params CreateRecordParams) (r *Entity, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DeleteRecordById implements DeleteRecordById operation.
+//
+// Deletes record.
+//
+// DELETE /entity/{name}/{id}
+func (UnimplementedHandler) DeleteRecordById(ctx context.Context, req *Entity, params DeleteRecordByIdParams) error {
+	return ht.ErrNotImplemented
+}
+
+// GetEntityMappings implements GetEntityMappings operation.
+//
+// Returns a mappings of loaded entities.
+//
+// GET /entity_mappings
+func (UnimplementedHandler) GetEntityMappings(ctx context.Context) (r []EntityMapping, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetRecordById implements GetRecordById operation.
+//
+// Retrieves one record by identifier.
+//
+// GET /entity/{name}/{id}
+func (UnimplementedHandler) GetRecordById(ctx context.Context, params GetRecordByIdParams) (r *Entity, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetRecords implements GetRecords operation.
+//
+// Retrieves records with pagination.
+//
+// GET /entity/{name}
+func (UnimplementedHandler) GetRecords(ctx context.Context, params GetRecordsParams) (r *EntitiesResponse, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateRecordById implements UpdateRecordById operation.
+//
+// Updates existing record.
+//
+// PUT /entity/{name}/{id}
+func (UnimplementedHandler) UpdateRecordById(ctx context.Context, req *Entity, params UpdateRecordByIdParams) (r *Entity, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

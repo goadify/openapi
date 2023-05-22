@@ -15,8 +15,314 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// EntityNameGetParams is parameters of GET /entity/{name} operation.
-type EntityNameGetParams struct {
+// CreateRecordParams is parameters of CreateRecord operation.
+type CreateRecordParams struct {
+	// Entity name.
+	Name string
+}
+
+func unpackCreateRecordParams(packed middleware.Parameters) (params CreateRecordParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "name",
+			In:   "path",
+		}
+		params.Name = packed[key].(string)
+	}
+	return params
+}
+
+func decodeCreateRecordParams(args [1]string, argsEscaped bool, r *http.Request) (params CreateRecordParams, _ error) {
+	// Decode path: name.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "name",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.Name = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "name",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// DeleteRecordByIdParams is parameters of DeleteRecordById operation.
+type DeleteRecordByIdParams struct {
+	// Entity name.
+	Name string
+	// Record id.
+	ID string
+}
+
+func unpackDeleteRecordByIdParams(packed middleware.Parameters) (params DeleteRecordByIdParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "name",
+			In:   "path",
+		}
+		params.Name = packed[key].(string)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(string)
+	}
+	return params
+}
+
+func decodeDeleteRecordByIdParams(args [2]string, argsEscaped bool, r *http.Request) (params DeleteRecordByIdParams, _ error) {
+	// Decode path: name.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "name",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.Name = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "name",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// GetRecordByIdParams is parameters of GetRecordById operation.
+type GetRecordByIdParams struct {
+	// Entity name.
+	Name string
+	// Record id.
+	ID string
+}
+
+func unpackGetRecordByIdParams(packed middleware.Parameters) (params GetRecordByIdParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "name",
+			In:   "path",
+		}
+		params.Name = packed[key].(string)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(string)
+	}
+	return params
+}
+
+func decodeGetRecordByIdParams(args [2]string, argsEscaped bool, r *http.Request) (params GetRecordByIdParams, _ error) {
+	// Decode path: name.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "name",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.Name = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "name",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// GetRecordsParams is parameters of GetRecords operation.
+type GetRecordsParams struct {
 	// Entity name.
 	Name string
 	// Selected page.
@@ -25,7 +331,7 @@ type EntityNameGetParams struct {
 	PerPage OptInt
 }
 
-func unpackEntityNameGetParams(packed middleware.Parameters) (params EntityNameGetParams) {
+func unpackGetRecordsParams(packed middleware.Parameters) (params GetRecordsParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "name",
@@ -54,7 +360,7 @@ func unpackEntityNameGetParams(packed middleware.Parameters) (params EntityNameG
 	return params
 }
 
-func decodeEntityNameGetParams(args [1]string, argsEscaped bool, r *http.Request) (params EntityNameGetParams, _ error) {
+func decodeGetRecordsParams(args [1]string, argsEscaped bool, r *http.Request) (params GetRecordsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: name.
 	if err := func() error {
@@ -196,15 +502,15 @@ func decodeEntityNameGetParams(args [1]string, argsEscaped bool, r *http.Request
 	return params, nil
 }
 
-// EntityNameIDDeleteParams is parameters of DELETE /entity/{name}/{id} operation.
-type EntityNameIDDeleteParams struct {
+// UpdateRecordByIdParams is parameters of UpdateRecordById operation.
+type UpdateRecordByIdParams struct {
 	// Entity name.
 	Name string
 	// Record id.
 	ID string
 }
 
-func unpackEntityNameIDDeleteParams(packed middleware.Parameters) (params EntityNameIDDeleteParams) {
+func unpackUpdateRecordByIdParams(packed middleware.Parameters) (params UpdateRecordByIdParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "name",
@@ -222,7 +528,7 @@ func unpackEntityNameIDDeleteParams(packed middleware.Parameters) (params Entity
 	return params
 }
 
-func decodeEntityNameIDDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params EntityNameIDDeleteParams, _ error) {
+func decodeUpdateRecordByIdParams(args [2]string, argsEscaped bool, r *http.Request) (params UpdateRecordByIdParams, _ error) {
 	// Decode path: name.
 	if err := func() error {
 		param := args[0]
@@ -309,312 +615,6 @@ func decodeEntityNameIDDeleteParams(args [2]string, argsEscaped bool, r *http.Re
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "id",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// EntityNameIDGetParams is parameters of GET /entity/{name}/{id} operation.
-type EntityNameIDGetParams struct {
-	// Entity name.
-	Name string
-	// Record id.
-	ID string
-}
-
-func unpackEntityNameIDGetParams(packed middleware.Parameters) (params EntityNameIDGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "name",
-			In:   "path",
-		}
-		params.Name = packed[key].(string)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "id",
-			In:   "path",
-		}
-		params.ID = packed[key].(string)
-	}
-	return params
-}
-
-func decodeEntityNameIDGetParams(args [2]string, argsEscaped bool, r *http.Request) (params EntityNameIDGetParams, _ error) {
-	// Decode path: name.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "name",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.Name = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "name",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode path: id.
-	if err := func() error {
-		param := args[1]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "id",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.ID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "id",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// EntityNameIDPutParams is parameters of PUT /entity/{name}/{id} operation.
-type EntityNameIDPutParams struct {
-	// Entity name.
-	Name string
-	// Record id.
-	ID string
-}
-
-func unpackEntityNameIDPutParams(packed middleware.Parameters) (params EntityNameIDPutParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "name",
-			In:   "path",
-		}
-		params.Name = packed[key].(string)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "id",
-			In:   "path",
-		}
-		params.ID = packed[key].(string)
-	}
-	return params
-}
-
-func decodeEntityNameIDPutParams(args [2]string, argsEscaped bool, r *http.Request) (params EntityNameIDPutParams, _ error) {
-	// Decode path: name.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "name",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.Name = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "name",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode path: id.
-	if err := func() error {
-		param := args[1]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "id",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.ID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "id",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// EntityNamePostParams is parameters of POST /entity/{name} operation.
-type EntityNamePostParams struct {
-	// Entity name.
-	Name string
-}
-
-func unpackEntityNamePostParams(packed middleware.Parameters) (params EntityNamePostParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "name",
-			In:   "path",
-		}
-		params.Name = packed[key].(string)
-	}
-	return params
-}
-
-func decodeEntityNamePostParams(args [1]string, argsEscaped bool, r *http.Request) (params EntityNamePostParams, _ error) {
-	// Decode path: name.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "name",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.Name = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "name",
 			In:   "path",
 			Err:  err,
 		}

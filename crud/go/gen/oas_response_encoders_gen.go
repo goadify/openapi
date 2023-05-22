@@ -11,7 +11,27 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeEntityMappingsGetResponse(response []EntityMapping, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateRecordResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	span.SetStatus(codes.Ok, http.StatusText(201))
+
+	e := jx.GetEncoder()
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+	return nil
+}
+
+func encodeDeleteRecordByIdResponse(response *NoContent, w http.ResponseWriter, span trace.Span) error {
+	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
+
+	return nil
+}
+
+func encodeGetEntityMappingsResponse(response []EntityMapping, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -28,7 +48,7 @@ func encodeEntityMappingsGetResponse(response []EntityMapping, w http.ResponseWr
 	return nil
 }
 
-func encodeEntityNameGetResponse(response *EntitiesResponse, w http.ResponseWriter, span trace.Span) error {
+func encodeGetRecordByIdResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -41,14 +61,7 @@ func encodeEntityNameGetResponse(response *EntitiesResponse, w http.ResponseWrit
 	return nil
 }
 
-func encodeEntityNameIDDeleteResponse(response *NoContent, w http.ResponseWriter, span trace.Span) error {
-	w.WriteHeader(204)
-	span.SetStatus(codes.Ok, http.StatusText(204))
-
-	return nil
-}
-
-func encodeEntityNameIDGetResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
+func encodeGetRecordsResponse(response *EntitiesResponse, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -61,23 +74,10 @@ func encodeEntityNameIDGetResponse(response *Entity, w http.ResponseWriter, span
 	return nil
 }
 
-func encodeEntityNameIDPutResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
+func encodeUpdateRecordByIdResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
-
-	e := jx.GetEncoder()
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-	return nil
-}
-
-func encodeEntityNamePostResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(201)
-	span.SetStatus(codes.Ok, http.StatusText(201))
 
 	e := jx.GetEncoder()
 	response.Encode(e)

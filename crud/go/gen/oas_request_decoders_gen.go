@@ -15,7 +15,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
+func (s *Server) decodeCreateRecordRequest(r *http.Request) (
 	req *Entity,
 	close func() error,
 	rerr error,
@@ -78,7 +78,7 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
+func (s *Server) decodeDeleteRecordByIdRequest(r *http.Request) (
 	req *Entity,
 	close func() error,
 	rerr error,
@@ -141,7 +141,7 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
+func (s *Server) decodeUpdateRecordByIdRequest(r *http.Request) (
 	req *Entity,
 	close func() error,
 	rerr error,
