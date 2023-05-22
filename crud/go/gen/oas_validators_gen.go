@@ -31,6 +31,9 @@ func (s *EntitiesResponse) Validate() error {
 func (s *EntityMapping) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if s.Fields == nil {
+			return errors.New("nil is invalid value")
+		}
 		var failures []validate.FieldError
 		for i, elem := range s.Fields {
 			if err := func() error {
