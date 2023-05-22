@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: CRUD module API
+  description: CRUD module API
+  version: 1.0.0
+
+paths:
+  /entity_mappings:
+    get:
+      description: Returns a mappings of loaded entities
+      responses:
+        200:
+          $ref: '#/components/responses/EntityMappingsResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /entity/{name}:
+    post:
+      description: Creates record
+      parameters:
+        - $ref: '#/components/parameters/EntityName'
+      requestBody:
+        $ref: '#/components/requestBodies/EntityRequest'
+      responses:
+        201:
+          $ref: '#/components/responses/EntityResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    get:
+      description: Retrieves records with pagination
+      parameters:
+        - $ref: '#/components/parameters/EntityName'
+        - $ref: '#/components/parameters/SelectedPage'
+        - $ref: '#/components/parameters/PerPage'
+
+      responses:
+        200:
+          $ref: '#/components/responses/EntitiesResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /entity/{name}/{id}:
+    get:
+      description: Retrieves one record by identifier
+      parameters:
+        - $ref: '#/components/parameters/EntityName'
+        - $ref: '#/components/parameters/RecordId'
+
+      responses:
+        200:
+          $ref: '#/components/responses/EntityResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      description: Updates existing record
+      parameters:
+        - $ref: '#/components/parameters/EntityName'
+        - $ref: '#/components/parameters/RecordId'
+      requestBody:
+        $ref: '#/components/requestBodies/EntityRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/EntityResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      description: Deletes record
+      parameters:
+        - $ref: '#/components/parameters/EntityName'
+        - $ref: '#/components/parameters/RecordId'
+      requestBody:
+        $ref: '#/components/requestBodies/EntityRequest'
+      responses:
+        204:
+          $ref: '#/components/responses/NoContent'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+
+
+components:
+  schemas:
+    Error:
+      description: Error schema
+      type: object
+      required: [ code,message ]
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+        display_message:
+          type: string
+          example: Well, I have tried, but nothing found
+
+    Entity:
+      type: object
+      description: Entity object. Any object can be here
+
+    EntityMapping:
+      description: Entity mapping
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            type: object
+            required: [ name, datatype ]
+            properties:
+              name:
+                type: string
+              datatype:
+                type: string
+                enum:
+                  - string
+                  - integer
+                  - float
+  requestBodies:
+    EntityRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Entity'
+  responses:
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    EntityResponse:
+      description: Entity response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Entity'
+
+    EntitiesResponse:
+      description: Set of entities response
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ totalCount, items ]
+            properties:
+              totalCount:
+                type: integer
+              items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Entity'
+
+    EntityMappingsResponse:
+      description: Mappings of entities
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EntityMapping'
+    NoContent:
+      description: No content
+
+  parameters:
+    SelectedPage:
+      in: query
+      name: page
+      description: Selected page
+      schema:
+        type: integer
+        default: 1
+
+    PerPage:
+      in: query
+      name: per-page
+      description: Items per page
+      schema:
+        type: integer
+        default: 20
+
+    EntityName:
+      required: true
+      in: path
+      name: name
+      description: Entity name
+      schema:
+        type: string
+
+    RecordId:
+      required: true
+      in: path
+      name: id
+      description: Record id
+      schema:
+        type: string
+
