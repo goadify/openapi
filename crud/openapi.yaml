@@ -102,6 +102,7 @@ components:
     EntityMapping:
       description: Entity mapping
       type: object
+      required: [ fields ]
       properties:
         fields:
           type: array
