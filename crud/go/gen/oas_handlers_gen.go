@@ -299,7 +299,7 @@ func (s *Server) handleEntityNameIDDeleteRequest(args [2]string, argsEscaped boo
 		}
 
 		type (
-			Request  = *Entity
+			Request  = OptEntity
 			Params   = EntityNameIDDeleteParams
 			Response = *NoContent
 		)
@@ -421,12 +421,12 @@ func (s *Server) handleEntityNameIDGetRequest(args [2]string, argsEscaped bool, 
 			mreq,
 			unpackEntityNameIDGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.EntityNameIDGet(ctx, params)
+				response, err = s.h.EntityNameIDGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.EntityNameIDGet(ctx, params)
+		response, err = s.h.EntityNameIDGet(ctx, params)
 	}
 	if err != nil {
 		recordError("Internal", err)
@@ -532,7 +532,7 @@ func (s *Server) handleEntityNameIDPutRequest(args [2]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = *Entity
+			Request  = OptEntity
 			Params   = EntityNameIDPutParams
 			Response = *Entity
 		)
@@ -545,12 +545,12 @@ func (s *Server) handleEntityNameIDPutRequest(args [2]string, argsEscaped bool, 
 			mreq,
 			unpackEntityNameIDPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.EntityNameIDPut(ctx, request, params)
+				response, err = s.h.EntityNameIDPut(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.EntityNameIDPut(ctx, request, params)
+		response, err = s.h.EntityNameIDPut(ctx, request, params)
 	}
 	if err != nil {
 		recordError("Internal", err)
@@ -652,7 +652,7 @@ func (s *Server) handleEntityNamePostRequest(args [1]string, argsEscaped bool, w
 		}
 
 		type (
-			Request  = *Entity
+			Request  = OptEntity
 			Params   = EntityNamePostParams
 			Response = *Entity
 		)
@@ -665,12 +665,12 @@ func (s *Server) handleEntityNamePostRequest(args [1]string, argsEscaped bool, w
 			mreq,
 			unpackEntityNamePostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.EntityNamePost(ctx, request, params)
+				response, err = s.h.EntityNamePost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.EntityNamePost(ctx, request, params)
+		response, err = s.h.EntityNamePost(ctx, request, params)
 	}
 	if err != nil {
 		recordError("Internal", err)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/go-faster/errors"
+	"github.com/go-faster/jx"
 )
 
 func (s *ErrorStatusCode) Error() string {
@@ -39,17 +40,51 @@ func (s *EntitiesResponse) SetItems(val []Entity) {
 
 // Entity object. Any object can be here.
 // Ref: #/components/schemas/Entity
-type Entity struct{}
+type Entity struct {
+	ID   string `json:"id"`
+	Data jx.Raw `json:"data"`
+}
+
+// GetID returns the value of ID.
+func (s *Entity) GetID() string {
+	return s.ID
+}
+
+// GetData returns the value of Data.
+func (s *Entity) GetData() jx.Raw {
+	return s.Data
+}
+
+// SetID sets the value of ID.
+func (s *Entity) SetID(val string) {
+	s.ID = val
+}
+
+// SetData sets the value of Data.
+func (s *Entity) SetData(val jx.Raw) {
+	s.Data = val
+}
 
 // Entity mapping.
 // Ref: #/components/schemas/EntityMapping
 type EntityMapping struct {
+	Name   string                    `json:"name"`
 	Fields []EntityMappingFieldsItem `json:"fields"`
+}
+
+// GetName returns the value of Name.
+func (s *EntityMapping) GetName() string {
+	return s.Name
 }
 
 // GetFields returns the value of Fields.
 func (s *EntityMapping) GetFields() []EntityMappingFieldsItem {
 	return s.Fields
+}
+
+// SetName sets the value of Name.
+func (s *EntityMapping) SetName(val string) {
+	s.Name = val
 }
 
 // SetFields sets the value of Fields.
@@ -187,6 +222,52 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 // Ref: #/components/responses/NoContent
 type NoContent struct{}
+
+// NewOptEntity returns new OptEntity with value set to v.
+func NewOptEntity(v Entity) OptEntity {
+	return OptEntity{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptEntity is optional Entity.
+type OptEntity struct {
+	Value Entity
+	Set   bool
+}
+
+// IsSet returns true if OptEntity was set.
+func (o OptEntity) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptEntity) Reset() {
+	var v Entity
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptEntity) SetTo(v Entity) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptEntity) Get() (v Entity, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptEntity) Or(d Entity) Entity {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {

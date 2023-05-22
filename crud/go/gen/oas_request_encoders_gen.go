@@ -12,13 +12,17 @@ import (
 )
 
 func encodeEntityNameIDDeleteRequest(
-	req *Entity,
+	req OptEntity,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
+	if !req.Set {
+		// Keep request with empty body if value is not set.
+		return nil
+	}
 	e := jx.GetEncoder()
 	{
-		if req != nil {
+		if req.Set {
 			req.Encode(e)
 		}
 	}
@@ -28,13 +32,17 @@ func encodeEntityNameIDDeleteRequest(
 }
 
 func encodeEntityNameIDPutRequest(
-	req *Entity,
+	req OptEntity,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
+	if !req.Set {
+		// Keep request with empty body if value is not set.
+		return nil
+	}
 	e := jx.GetEncoder()
 	{
-		if req != nil {
+		if req.Set {
 			req.Encode(e)
 		}
 	}
@@ -44,13 +52,17 @@ func encodeEntityNameIDPutRequest(
 }
 
 func encodeEntityNamePostRequest(
-	req *Entity,
+	req OptEntity,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
+	if !req.Set {
+		// Keep request with empty body if value is not set.
+		return nil
+	}
 	e := jx.GetEncoder()
 	{
-		if req != nil {
+		if req.Set {
 			req.Encode(e)
 		}
 	}

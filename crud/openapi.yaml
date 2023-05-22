@@ -98,12 +98,21 @@ components:
     Entity:
       type: object
       description: Entity object. Any object can be here
+      required: [ id, data ]
+      properties:
+        id:
+          type: string
+        data: {}
+
 
     EntityMapping:
       description: Entity mapping
       type: object
-      required: [ fields ]
+      required: [ name, fields ]
       properties:
+        name:
+          type: string
+          example: user
         fields:
           type: array
           items:

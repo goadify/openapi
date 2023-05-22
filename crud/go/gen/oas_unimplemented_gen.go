@@ -36,7 +36,7 @@ func (UnimplementedHandler) EntityNameGet(ctx context.Context, params EntityName
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDDelete(ctx context.Context, req *Entity, params EntityNameIDDeleteParams) error {
+func (UnimplementedHandler) EntityNameIDDelete(ctx context.Context, req OptEntity, params EntityNameIDDeleteParams) error {
 	return ht.ErrNotImplemented
 }
 
@@ -45,8 +45,8 @@ func (UnimplementedHandler) EntityNameIDDelete(ctx context.Context, req *Entity,
 // Retrieves one record by identifier.
 //
 // GET /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) error {
-	return ht.ErrNotImplemented
+func (UnimplementedHandler) EntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) (r *Entity, _ error) {
+	return r, ht.ErrNotImplemented
 }
 
 // EntityNameIDPut implements PUT /entity/{name}/{id} operation.
@@ -54,8 +54,8 @@ func (UnimplementedHandler) EntityNameIDGet(ctx context.Context, params EntityNa
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req *Entity, params EntityNameIDPutParams) error {
-	return ht.ErrNotImplemented
+func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req OptEntity, params EntityNameIDPutParams) (r *Entity, _ error) {
+	return r, ht.ErrNotImplemented
 }
 
 // EntityNamePost implements POST /entity/{name} operation.
@@ -63,8 +63,8 @@ func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req *Entity, pa
 // Creates record.
 //
 // POST /entity/{name}
-func (UnimplementedHandler) EntityNamePost(ctx context.Context, req *Entity, params EntityNamePostParams) error {
-	return ht.ErrNotImplemented
+func (UnimplementedHandler) EntityNamePost(ctx context.Context, req OptEntity, params EntityNamePostParams) (r *Entity, _ error) {
+	return r, ht.ErrNotImplemented
 }
 
 // NewError creates *ErrorStatusCode from error returned by handler.

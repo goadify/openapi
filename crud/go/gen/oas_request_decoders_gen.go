@@ -16,7 +16,7 @@ import (
 )
 
 func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
-	req *Entity,
+	req OptEntity,
 	close func() error,
 	rerr error,
 ) {
@@ -58,14 +58,12 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request *Entity
+		var request OptEntity
 		if err := func() error {
-			request = nil
-			var elem Entity
-			if err := elem.Decode(d); err != nil {
+			request.Reset()
+			if err := request.Decode(d); err != nil {
 				return err
 			}
-			request = &elem
 			if err := d.Skip(); err != io.EOF {
 				return errors.New("unexpected trailing data")
 			}
@@ -85,7 +83,7 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 }
 
 func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
-	req *Entity,
+	req OptEntity,
 	close func() error,
 	rerr error,
 ) {
@@ -127,14 +125,12 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request *Entity
+		var request OptEntity
 		if err := func() error {
-			request = nil
-			var elem Entity
-			if err := elem.Decode(d); err != nil {
+			request.Reset()
+			if err := request.Decode(d); err != nil {
 				return err
 			}
-			request = &elem
 			if err := d.Skip(); err != io.EOF {
 				return errors.New("unexpected trailing data")
 			}
@@ -154,7 +150,7 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 }
 
 func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
-	req *Entity,
+	req OptEntity,
 	close func() error,
 	rerr error,
 ) {
@@ -196,14 +192,12 @@ func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request *Entity
+		var request OptEntity
 		if err := func() error {
-			request = nil
-			var elem Entity
-			if err := elem.Decode(d); err != nil {
+			request.Reset()
+			if err := request.Decode(d); err != nil {
 				return err
 			}
-			request = &elem
 			if err := d.Skip(); err != io.EOF {
 				return errors.New("unexpected trailing data")
 			}

@@ -25,25 +25,25 @@ type Handler interface {
 	// Deletes record.
 	//
 	// DELETE /entity/{name}/{id}
-	EntityNameIDDelete(ctx context.Context, req *Entity, params EntityNameIDDeleteParams) error
+	EntityNameIDDelete(ctx context.Context, req OptEntity, params EntityNameIDDeleteParams) error
 	// EntityNameIDGet implements GET /entity/{name}/{id} operation.
 	//
 	// Retrieves one record by identifier.
 	//
 	// GET /entity/{name}/{id}
-	EntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) error
+	EntityNameIDGet(ctx context.Context, params EntityNameIDGetParams) (*Entity, error)
 	// EntityNameIDPut implements PUT /entity/{name}/{id} operation.
 	//
 	// Updates existing record.
 	//
 	// PUT /entity/{name}/{id}
-	EntityNameIDPut(ctx context.Context, req *Entity, params EntityNameIDPutParams) error
+	EntityNameIDPut(ctx context.Context, req OptEntity, params EntityNameIDPutParams) (*Entity, error)
 	// EntityNamePost implements POST /entity/{name} operation.
 	//
 	// Creates record.
 	//
 	// POST /entity/{name}
-	EntityNamePost(ctx context.Context, req *Entity, params EntityNamePostParams) error
+	EntityNamePost(ctx context.Context, req OptEntity, params EntityNamePostParams) (*Entity, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.
