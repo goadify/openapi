@@ -129,6 +129,7 @@ components:
                   - float
   requestBodies:
     EntityRequest:
+      required: true
       content:
         application/json:
           schema:

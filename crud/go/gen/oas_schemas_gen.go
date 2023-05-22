@@ -223,52 +223,6 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 // Ref: #/components/responses/NoContent
 type NoContent struct{}
 
-// NewOptEntity returns new OptEntity with value set to v.
-func NewOptEntity(v Entity) OptEntity {
-	return OptEntity{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptEntity is optional Entity.
-type OptEntity struct {
-	Value Entity
-	Set   bool
-}
-
-// IsSet returns true if OptEntity was set.
-func (o OptEntity) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptEntity) Reset() {
-	var v Entity
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptEntity) SetTo(v Entity) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptEntity) Get() (v Entity, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptEntity) Or(d Entity) Entity {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{

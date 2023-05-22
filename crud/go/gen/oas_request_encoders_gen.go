@@ -12,19 +12,13 @@ import (
 )
 
 func encodeEntityNameIDDeleteRequest(
-	req OptEntity,
+	req *Entity,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := jx.GetEncoder()
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -32,19 +26,13 @@ func encodeEntityNameIDDeleteRequest(
 }
 
 func encodeEntityNameIDPutRequest(
-	req OptEntity,
+	req *Entity,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := jx.GetEncoder()
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)
@@ -52,19 +40,13 @@ func encodeEntityNameIDPutRequest(
 }
 
 func encodeEntityNamePostRequest(
-	req OptEntity,
+	req *Entity,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
 	e := jx.GetEncoder()
 	{
-		if req.Set {
-			req.Encode(e)
-		}
+		req.Encode(e)
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)

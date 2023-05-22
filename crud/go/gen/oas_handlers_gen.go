@@ -299,7 +299,7 @@ func (s *Server) handleEntityNameIDDeleteRequest(args [2]string, argsEscaped boo
 		}
 
 		type (
-			Request  = OptEntity
+			Request  = *Entity
 			Params   = EntityNameIDDeleteParams
 			Response = *NoContent
 		)
@@ -532,7 +532,7 @@ func (s *Server) handleEntityNameIDPutRequest(args [2]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = OptEntity
+			Request  = *Entity
 			Params   = EntityNameIDPutParams
 			Response = *Entity
 		)
@@ -652,7 +652,7 @@ func (s *Server) handleEntityNamePostRequest(args [1]string, argsEscaped bool, w
 		}
 
 		type (
-			Request  = OptEntity
+			Request  = *Entity
 			Params   = EntityNamePostParams
 			Response = *Entity
 		)

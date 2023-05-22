@@ -265,13 +265,13 @@ func (c *Client) sendEntityNameGet(ctx context.Context, params EntityNameGetPara
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (c *Client) EntityNameIDDelete(ctx context.Context, request OptEntity, params EntityNameIDDeleteParams) error {
+func (c *Client) EntityNameIDDelete(ctx context.Context, request *Entity, params EntityNameIDDeleteParams) error {
 	res, err := c.sendEntityNameIDDelete(ctx, request, params)
 	_ = res
 	return err
 }
 
-func (c *Client) sendEntityNameIDDelete(ctx context.Context, request OptEntity, params EntityNameIDDeleteParams) (res *NoContent, err error) {
+func (c *Client) sendEntityNameIDDelete(ctx context.Context, request *Entity, params EntityNameIDDeleteParams) (res *NoContent, err error) {
 	var otelAttrs []attribute.KeyValue
 
 	// Run stopwatch.
@@ -476,13 +476,13 @@ func (c *Client) sendEntityNameIDGet(ctx context.Context, params EntityNameIDGet
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (c *Client) EntityNameIDPut(ctx context.Context, request OptEntity, params EntityNameIDPutParams) (*Entity, error) {
+func (c *Client) EntityNameIDPut(ctx context.Context, request *Entity, params EntityNameIDPutParams) (*Entity, error) {
 	res, err := c.sendEntityNameIDPut(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendEntityNameIDPut(ctx context.Context, request OptEntity, params EntityNameIDPutParams) (res *Entity, err error) {
+func (c *Client) sendEntityNameIDPut(ctx context.Context, request *Entity, params EntityNameIDPutParams) (res *Entity, err error) {
 	var otelAttrs []attribute.KeyValue
 
 	// Run stopwatch.
@@ -583,13 +583,13 @@ func (c *Client) sendEntityNameIDPut(ctx context.Context, request OptEntity, par
 // Creates record.
 //
 // POST /entity/{name}
-func (c *Client) EntityNamePost(ctx context.Context, request OptEntity, params EntityNamePostParams) (*Entity, error) {
+func (c *Client) EntityNamePost(ctx context.Context, request *Entity, params EntityNamePostParams) (*Entity, error) {
 	res, err := c.sendEntityNamePost(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendEntityNamePost(ctx context.Context, request OptEntity, params EntityNamePostParams) (res *Entity, err error) {
+func (c *Client) sendEntityNamePost(ctx context.Context, request *Entity, params EntityNamePostParams) (res *Entity, err error) {
 	var otelAttrs []attribute.KeyValue
 
 	// Run stopwatch.

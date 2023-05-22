@@ -25,7 +25,7 @@ type Handler interface {
 	// Deletes record.
 	//
 	// DELETE /entity/{name}/{id}
-	EntityNameIDDelete(ctx context.Context, req OptEntity, params EntityNameIDDeleteParams) error
+	EntityNameIDDelete(ctx context.Context, req *Entity, params EntityNameIDDeleteParams) error
 	// EntityNameIDGet implements GET /entity/{name}/{id} operation.
 	//
 	// Retrieves one record by identifier.
@@ -37,13 +37,13 @@ type Handler interface {
 	// Updates existing record.
 	//
 	// PUT /entity/{name}/{id}
-	EntityNameIDPut(ctx context.Context, req OptEntity, params EntityNameIDPutParams) (*Entity, error)
+	EntityNameIDPut(ctx context.Context, req *Entity, params EntityNameIDPutParams) (*Entity, error)
 	// EntityNamePost implements POST /entity/{name} operation.
 	//
 	// Creates record.
 	//
 	// POST /entity/{name}
-	EntityNamePost(ctx context.Context, req OptEntity, params EntityNamePostParams) (*Entity, error)
+	EntityNamePost(ctx context.Context, req *Entity, params EntityNamePostParams) (*Entity, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

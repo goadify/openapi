@@ -36,7 +36,7 @@ func (UnimplementedHandler) EntityNameGet(ctx context.Context, params EntityName
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDDelete(ctx context.Context, req OptEntity, params EntityNameIDDeleteParams) error {
+func (UnimplementedHandler) EntityNameIDDelete(ctx context.Context, req *Entity, params EntityNameIDDeleteParams) error {
 	return ht.ErrNotImplemented
 }
 
@@ -54,7 +54,7 @@ func (UnimplementedHandler) EntityNameIDGet(ctx context.Context, params EntityNa
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req OptEntity, params EntityNameIDPutParams) (r *Entity, _ error) {
+func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req *Entity, params EntityNameIDPutParams) (r *Entity, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,7 +63,7 @@ func (UnimplementedHandler) EntityNameIDPut(ctx context.Context, req OptEntity, 
 // Creates record.
 //
 // POST /entity/{name}
-func (UnimplementedHandler) EntityNamePost(ctx context.Context, req OptEntity, params EntityNamePostParams) (r *Entity, _ error) {
+func (UnimplementedHandler) EntityNamePost(ctx context.Context, req *Entity, params EntityNamePostParams) (r *Entity, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

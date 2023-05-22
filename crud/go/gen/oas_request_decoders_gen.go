@@ -16,7 +16,7 @@ import (
 )
 
 func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
-	req OptEntity,
+	req *Entity,
 	close func() error,
 	rerr error,
 ) {
@@ -35,9 +35,6 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -45,7 +42,7 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -53,14 +50,13 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptEntity
+		var request Entity
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -76,14 +72,14 @@ func (s *Server) decodeEntityNameIDDeleteRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
-	req OptEntity,
+	req *Entity,
 	close func() error,
 	rerr error,
 ) {
@@ -102,9 +98,6 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -112,7 +105,7 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -120,14 +113,13 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptEntity
+		var request Entity
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -143,14 +135,14 @@ func (s *Server) decodeEntityNameIDPutRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
-	req OptEntity,
+	req *Entity,
 	close func() error,
 	rerr error,
 ) {
@@ -169,9 +161,6 @@ func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
 			rerr = multierr.Append(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, close, errors.Wrap(err, "parse media type")
@@ -179,7 +168,7 @@ func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -187,14 +176,13 @@ func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
 		}
 
 		if len(buf) == 0 {
-			return req, close, nil
+			return req, close, validate.ErrBodyRequired
 		}
 
 		d := jx.DecodeBytes(buf)
 
-		var request OptEntity
+		var request Entity
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -210,7 +198,7 @@ func (s *Server) decodeEntityNamePostRequest(r *http.Request) (
 			}
 			return req, close, err
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
