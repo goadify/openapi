@@ -77,13 +77,13 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Creates record.
 //
 // POST /entity/{name}
-func (c *Client) CreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (*Entity, error) {
+func (c *Client) CreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (*IdentifiedEntity, error) {
 	res, err := c.sendCreateRecord(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendCreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (res *Entity, err error) {
+func (c *Client) sendCreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (res *IdentifiedEntity, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("CreateRecord"),
 	}
@@ -348,13 +348,13 @@ func (c *Client) sendGetEntityMappings(ctx context.Context) (res []EntityMapping
 // Retrieves one record by identifier.
 //
 // GET /entity/{name}/{id}
-func (c *Client) GetRecordById(ctx context.Context, params GetRecordByIdParams) (*Entity, error) {
+func (c *Client) GetRecordById(ctx context.Context, params GetRecordByIdParams) (*IdentifiedEntity, error) {
 	res, err := c.sendGetRecordById(ctx, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendGetRecordById(ctx context.Context, params GetRecordByIdParams) (res *Entity, err error) {
+func (c *Client) sendGetRecordById(ctx context.Context, params GetRecordByIdParams) (res *IdentifiedEntity, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("GetRecordById"),
 	}
@@ -581,13 +581,13 @@ func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (r
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (c *Client) UpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (*Entity, error) {
+func (c *Client) UpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (*IdentifiedEntity, error) {
 	res, err := c.sendUpdateRecordById(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendUpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (res *Entity, err error) {
+func (c *Client) sendUpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (res *IdentifiedEntity, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("UpdateRecordById"),
 	}

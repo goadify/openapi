@@ -14,8 +14,8 @@ func (s *ErrorStatusCode) Error() string {
 }
 
 type EntitiesResponse struct {
-	TotalCount int      `json:"totalCount"`
-	Items      []Entity `json:"items"`
+	TotalCount int                `json:"totalCount"`
+	Items      []IdentifiedEntity `json:"items"`
 }
 
 // GetTotalCount returns the value of TotalCount.
@@ -24,7 +24,7 @@ func (s *EntitiesResponse) GetTotalCount() int {
 }
 
 // GetItems returns the value of Items.
-func (s *EntitiesResponse) GetItems() []Entity {
+func (s *EntitiesResponse) GetItems() []IdentifiedEntity {
 	return s.Items
 }
 
@@ -34,30 +34,19 @@ func (s *EntitiesResponse) SetTotalCount(val int) {
 }
 
 // SetItems sets the value of Items.
-func (s *EntitiesResponse) SetItems(val []Entity) {
+func (s *EntitiesResponse) SetItems(val []IdentifiedEntity) {
 	s.Items = val
 }
 
-// Entity object. Any object can be here.
+// Entity object.
 // Ref: #/components/schemas/Entity
 type Entity struct {
-	ID   string `json:"id"`
 	Data jx.Raw `json:"data"`
-}
-
-// GetID returns the value of ID.
-func (s *Entity) GetID() string {
-	return s.ID
 }
 
 // GetData returns the value of Data.
 func (s *Entity) GetData() jx.Raw {
 	return s.Data
-}
-
-// SetID sets the value of ID.
-func (s *Entity) SetID(val string) {
-	s.ID = val
 }
 
 // SetData sets the value of Data.
@@ -218,6 +207,33 @@ func (s *ErrorStatusCode) SetStatusCode(val int) {
 // SetResponse sets the value of Response.
 func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
+}
+
+// Entity object with identifier.
+// Ref: #/components/schemas/IdentifiedEntity
+type IdentifiedEntity struct {
+	ID   string `json:"id"`
+	Data jx.Raw `json:"data"`
+}
+
+// GetID returns the value of ID.
+func (s *IdentifiedEntity) GetID() string {
+	return s.ID
+}
+
+// GetData returns the value of Data.
+func (s *IdentifiedEntity) GetData() jx.Raw {
+	return s.Data
+}
+
+// SetID sets the value of ID.
+func (s *IdentifiedEntity) SetID(val string) {
+	s.ID = val
+}
+
+// SetData sets the value of Data.
+func (s *IdentifiedEntity) SetData(val jx.Raw) {
+	s.Data = val
 }
 
 // Ref: #/components/responses/NoContent

@@ -103,12 +103,19 @@ components:
 
     Entity:
       type: object
-      description: Entity object. Any object can be here
+      description: Entity object
+      required: [ data ]
+      properties:
+        data: {}
+
+    IdentifiedEntity:
+      type: object
+      description: Entity object with identifier
       required: [ id, data ]
       properties:
         id:
           type: string
-        data: {}
+        data: { }
 
 
     EntityMapping:
@@ -153,7 +160,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Entity'
+            $ref: '#/components/schemas/IdentifiedEntity'
 
     EntitiesResponse:
       description: Set of entities response
@@ -168,7 +175,7 @@ components:
               items:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/IdentifiedEntity'
 
     EntityMappingsResponse:
       description: Mappings of entities

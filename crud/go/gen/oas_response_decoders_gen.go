@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeCreateRecordResponse(resp *http.Response) (res *Entity, _ error) {
+func decodeCreateRecordResponse(resp *http.Response) (res *IdentifiedEntity, _ error) {
 	switch resp.StatusCode {
 	case 201:
 		// Code 201.
@@ -30,7 +30,7 @@ func decodeCreateRecordResponse(resp *http.Response) (res *Entity, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Entity
+			var response IdentifiedEntity
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -239,7 +239,7 @@ func decodeGetEntityMappingsResponse(resp *http.Response) (res []EntityMapping, 
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeGetRecordByIdResponse(resp *http.Response) (res *Entity, _ error) {
+func decodeGetRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -255,7 +255,7 @@ func decodeGetRecordByIdResponse(resp *http.Response) (res *Entity, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Entity
+			var response IdentifiedEntity
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -405,7 +405,7 @@ func decodeGetRecordsResponse(resp *http.Response) (res *EntitiesResponse, _ err
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUpdateRecordByIdResponse(resp *http.Response) (res *Entity, _ error) {
+func decodeUpdateRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -421,7 +421,7 @@ func decodeUpdateRecordByIdResponse(resp *http.Response) (res *Entity, _ error) 
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Entity
+			var response IdentifiedEntity
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

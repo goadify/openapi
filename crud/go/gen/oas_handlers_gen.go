@@ -87,7 +87,7 @@ func (s *Server) handleCreateRecordRequest(args [1]string, argsEscaped bool, w h
 		}
 	}()
 
-	var response *Entity
+	var response *IdentifiedEntity
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -106,7 +106,7 @@ func (s *Server) handleCreateRecordRequest(args [1]string, argsEscaped bool, w h
 		type (
 			Request  = *Entity
 			Params   = CreateRecordParams
-			Response = *Entity
+			Response = *IdentifiedEntity
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -417,7 +417,7 @@ func (s *Server) handleGetRecordByIdRequest(args [2]string, argsEscaped bool, w 
 		return
 	}
 
-	var response *Entity
+	var response *IdentifiedEntity
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -440,7 +440,7 @@ func (s *Server) handleGetRecordByIdRequest(args [2]string, argsEscaped bool, w 
 		type (
 			Request  = struct{}
 			Params   = GetRecordByIdParams
-			Response = *Entity
+			Response = *IdentifiedEntity
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -664,7 +664,7 @@ func (s *Server) handleUpdateRecordByIdRequest(args [2]string, argsEscaped bool,
 		}
 	}()
 
-	var response *Entity
+	var response *IdentifiedEntity
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -687,7 +687,7 @@ func (s *Server) handleUpdateRecordByIdRequest(args [2]string, argsEscaped bool,
 		type (
 			Request  = *Entity
 			Params   = UpdateRecordByIdParams
-			Response = *Entity
+			Response = *IdentifiedEntity
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

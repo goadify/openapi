@@ -13,7 +13,7 @@ type Handler interface {
 	// Creates record.
 	//
 	// POST /entity/{name}
-	CreateRecord(ctx context.Context, req *Entity, params CreateRecordParams) (*Entity, error)
+	CreateRecord(ctx context.Context, req *Entity, params CreateRecordParams) (*IdentifiedEntity, error)
 	// DeleteRecordById implements DeleteRecordById operation.
 	//
 	// Deletes record.
@@ -31,7 +31,7 @@ type Handler interface {
 	// Retrieves one record by identifier.
 	//
 	// GET /entity/{name}/{id}
-	GetRecordById(ctx context.Context, params GetRecordByIdParams) (*Entity, error)
+	GetRecordById(ctx context.Context, params GetRecordByIdParams) (*IdentifiedEntity, error)
 	// GetRecords implements GetRecords operation.
 	//
 	// Retrieves records with pagination.
@@ -43,7 +43,7 @@ type Handler interface {
 	// Updates existing record.
 	//
 	// PUT /entity/{name}/{id}
-	UpdateRecordById(ctx context.Context, req *Entity, params UpdateRecordByIdParams) (*Entity, error)
+	UpdateRecordById(ctx context.Context, req *Entity, params UpdateRecordByIdParams) (*IdentifiedEntity, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

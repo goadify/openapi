@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeCreateRecordResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateRecordResponse(response *IdentifiedEntity, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(201)
 	span.SetStatus(codes.Ok, http.StatusText(201))
@@ -48,7 +48,7 @@ func encodeGetEntityMappingsResponse(response []EntityMapping, w http.ResponseWr
 	return nil
 }
 
-func encodeGetRecordByIdResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
+func encodeGetRecordByIdResponse(response *IdentifiedEntity, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -74,7 +74,7 @@ func encodeGetRecordsResponse(response *EntitiesResponse, w http.ResponseWriter,
 	return nil
 }
 
-func encodeUpdateRecordByIdResponse(response *Entity, w http.ResponseWriter, span trace.Span) error {
+func encodeUpdateRecordByIdResponse(response *IdentifiedEntity, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
