@@ -77,13 +77,13 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Creates record.
 //
 // POST /entity/{name}
-func (c *Client) CreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (*IdentifiedEntity, error) {
+func (c *Client) CreateRecord(ctx context.Context, request *Record, params CreateRecordParams) (*IdentifiedRecord, error) {
 	res, err := c.sendCreateRecord(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendCreateRecord(ctx context.Context, request *Entity, params CreateRecordParams) (res *IdentifiedEntity, err error) {
+func (c *Client) sendCreateRecord(ctx context.Context, request *Record, params CreateRecordParams) (res *IdentifiedRecord, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("CreateRecord"),
 	}
@@ -168,13 +168,13 @@ func (c *Client) sendCreateRecord(ctx context.Context, request *Entity, params C
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (c *Client) DeleteRecordById(ctx context.Context, request *Entity, params DeleteRecordByIdParams) error {
+func (c *Client) DeleteRecordById(ctx context.Context, request *Record, params DeleteRecordByIdParams) error {
 	res, err := c.sendDeleteRecordById(ctx, request, params)
 	_ = res
 	return err
 }
 
-func (c *Client) sendDeleteRecordById(ctx context.Context, request *Entity, params DeleteRecordByIdParams) (res *NoContent, err error) {
+func (c *Client) sendDeleteRecordById(ctx context.Context, request *Record, params DeleteRecordByIdParams) (res *NoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("DeleteRecordById"),
 	}
@@ -273,20 +273,20 @@ func (c *Client) sendDeleteRecordById(ctx context.Context, request *Entity, para
 	return result, nil
 }
 
-// GetEntityMappings invokes GetEntityMappings operation.
+// GetEntitiesMappings invokes GetEntitiesMappings operation.
 //
 // Returns a mappings of loaded entities.
 //
 // GET /entity_mappings
-func (c *Client) GetEntityMappings(ctx context.Context) ([]EntityMapping, error) {
-	res, err := c.sendGetEntityMappings(ctx)
+func (c *Client) GetEntitiesMappings(ctx context.Context) ([]EntityMapping, error) {
+	res, err := c.sendGetEntitiesMappings(ctx)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendGetEntityMappings(ctx context.Context) (res []EntityMapping, err error) {
+func (c *Client) sendGetEntitiesMappings(ctx context.Context) (res []EntityMapping, err error) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("GetEntityMappings"),
+		otelogen.OperationID("GetEntitiesMappings"),
 	}
 
 	// Run stopwatch.
@@ -300,7 +300,7 @@ func (c *Client) sendGetEntityMappings(ctx context.Context) (res []EntityMapping
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetEntityMappings",
+	ctx, span := c.cfg.Tracer.Start(ctx, "GetEntitiesMappings",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -335,7 +335,7 @@ func (c *Client) sendGetEntityMappings(ctx context.Context) (res []EntityMapping
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeGetEntityMappingsResponse(resp)
+	result, err := decodeGetEntitiesMappingsResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -348,13 +348,13 @@ func (c *Client) sendGetEntityMappings(ctx context.Context) (res []EntityMapping
 // Retrieves one record by identifier.
 //
 // GET /entity/{name}/{id}
-func (c *Client) GetRecordById(ctx context.Context, params GetRecordByIdParams) (*IdentifiedEntity, error) {
+func (c *Client) GetRecordById(ctx context.Context, params GetRecordByIdParams) (*IdentifiedRecord, error) {
 	res, err := c.sendGetRecordById(ctx, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendGetRecordById(ctx context.Context, params GetRecordByIdParams) (res *IdentifiedEntity, err error) {
+func (c *Client) sendGetRecordById(ctx context.Context, params GetRecordByIdParams) (res *IdentifiedRecord, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("GetRecordById"),
 	}
@@ -455,13 +455,13 @@ func (c *Client) sendGetRecordById(ctx context.Context, params GetRecordByIdPara
 // Retrieves records with pagination.
 //
 // GET /entity/{name}
-func (c *Client) GetRecords(ctx context.Context, params GetRecordsParams) (*EntitiesResponse, error) {
+func (c *Client) GetRecords(ctx context.Context, params GetRecordsParams) (*RecordsResponse, error) {
 	res, err := c.sendGetRecords(ctx, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (res *EntitiesResponse, err error) {
+func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (res *RecordsResponse, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("GetRecords"),
 	}
@@ -581,13 +581,13 @@ func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (r
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (c *Client) UpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (*IdentifiedEntity, error) {
+func (c *Client) UpdateRecordById(ctx context.Context, request *Record, params UpdateRecordByIdParams) (*IdentifiedRecord, error) {
 	res, err := c.sendUpdateRecordById(ctx, request, params)
 	_ = res
 	return res, err
 }
 
-func (c *Client) sendUpdateRecordById(ctx context.Context, request *Entity, params UpdateRecordByIdParams) (res *IdentifiedEntity, err error) {
+func (c *Client) sendUpdateRecordById(ctx context.Context, request *Record, params UpdateRecordByIdParams) (res *IdentifiedRecord, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("UpdateRecordById"),
 	}

@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeCreateRecordResponse(resp *http.Response) (res *IdentifiedEntity, _ error) {
+func decodeCreateRecordResponse(resp *http.Response) (res *IdentifiedRecord, _ error) {
 	switch resp.StatusCode {
 	case 201:
 		// Code 201.
@@ -30,7 +30,7 @@ func decodeCreateRecordResponse(resp *http.Response) (res *IdentifiedEntity, _ e
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response IdentifiedEntity
+			var response IdentifiedRecord
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -148,7 +148,7 @@ func decodeDeleteRecordByIdResponse(resp *http.Response) (res *NoContent, _ erro
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeGetEntityMappingsResponse(resp *http.Response) (res []EntityMapping, _ error) {
+func decodeGetEntitiesMappingsResponse(resp *http.Response) (res []EntityMapping, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -239,7 +239,7 @@ func decodeGetEntityMappingsResponse(resp *http.Response) (res []EntityMapping, 
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeGetRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity, _ error) {
+func decodeGetRecordByIdResponse(resp *http.Response) (res *IdentifiedRecord, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -255,7 +255,7 @@ func decodeGetRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity, _ 
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response IdentifiedEntity
+			var response IdentifiedRecord
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -322,7 +322,7 @@ func decodeGetRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity, _ 
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeGetRecordsResponse(resp *http.Response) (res *EntitiesResponse, _ error) {
+func decodeGetRecordsResponse(resp *http.Response) (res *RecordsResponse, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -338,7 +338,7 @@ func decodeGetRecordsResponse(resp *http.Response) (res *EntitiesResponse, _ err
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response EntitiesResponse
+			var response RecordsResponse
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -405,7 +405,7 @@ func decodeGetRecordsResponse(resp *http.Response) (res *EntitiesResponse, _ err
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUpdateRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity, _ error) {
+func decodeUpdateRecordByIdResponse(resp *http.Response) (res *IdentifiedRecord, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -421,7 +421,7 @@ func decodeUpdateRecordByIdResponse(resp *http.Response) (res *IdentifiedEntity,
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response IdentifiedEntity
+			var response IdentifiedRecord
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

@@ -13,37 +13,37 @@ type Handler interface {
 	// Creates record.
 	//
 	// POST /entity/{name}
-	CreateRecord(ctx context.Context, req *Entity, params CreateRecordParams) (*IdentifiedEntity, error)
+	CreateRecord(ctx context.Context, req *Record, params CreateRecordParams) (*IdentifiedRecord, error)
 	// DeleteRecordById implements DeleteRecordById operation.
 	//
 	// Deletes record.
 	//
 	// DELETE /entity/{name}/{id}
-	DeleteRecordById(ctx context.Context, req *Entity, params DeleteRecordByIdParams) error
-	// GetEntityMappings implements GetEntityMappings operation.
+	DeleteRecordById(ctx context.Context, req *Record, params DeleteRecordByIdParams) error
+	// GetEntitiesMappings implements GetEntitiesMappings operation.
 	//
 	// Returns a mappings of loaded entities.
 	//
 	// GET /entity_mappings
-	GetEntityMappings(ctx context.Context) ([]EntityMapping, error)
+	GetEntitiesMappings(ctx context.Context) ([]EntityMapping, error)
 	// GetRecordById implements GetRecordById operation.
 	//
 	// Retrieves one record by identifier.
 	//
 	// GET /entity/{name}/{id}
-	GetRecordById(ctx context.Context, params GetRecordByIdParams) (*IdentifiedEntity, error)
+	GetRecordById(ctx context.Context, params GetRecordByIdParams) (*IdentifiedRecord, error)
 	// GetRecords implements GetRecords operation.
 	//
 	// Retrieves records with pagination.
 	//
 	// GET /entity/{name}
-	GetRecords(ctx context.Context, params GetRecordsParams) (*EntitiesResponse, error)
+	GetRecords(ctx context.Context, params GetRecordsParams) (*RecordsResponse, error)
 	// UpdateRecordById implements UpdateRecordById operation.
 	//
 	// Updates existing record.
 	//
 	// PUT /entity/{name}/{id}
-	UpdateRecordById(ctx context.Context, req *Entity, params UpdateRecordByIdParams) (*IdentifiedEntity, error)
+	UpdateRecordById(ctx context.Context, req *Record, params UpdateRecordByIdParams) (*IdentifiedRecord, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

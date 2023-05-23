@@ -87,7 +87,7 @@ func (s *Server) handleCreateRecordRequest(args [1]string, argsEscaped bool, w h
 		}
 	}()
 
-	var response *IdentifiedEntity
+	var response *IdentifiedRecord
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -104,9 +104,9 @@ func (s *Server) handleCreateRecordRequest(args [1]string, argsEscaped bool, w h
 		}
 
 		type (
-			Request  = *Entity
+			Request  = *Record
 			Params   = CreateRecordParams
-			Response = *IdentifiedEntity
+			Response = *IdentifiedRecord
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -233,7 +233,7 @@ func (s *Server) handleDeleteRecordByIdRequest(args [2]string, argsEscaped bool,
 		}
 
 		type (
-			Request  = *Entity
+			Request  = *Record
 			Params   = DeleteRecordByIdParams
 			Response = *NoContent
 		)
@@ -274,20 +274,20 @@ func (s *Server) handleDeleteRecordByIdRequest(args [2]string, argsEscaped bool,
 	}
 }
 
-// handleGetEntityMappingsRequest handles GetEntityMappings operation.
+// handleGetEntitiesMappingsRequest handles GetEntitiesMappings operation.
 //
 // Returns a mappings of loaded entities.
 //
 // GET /entity_mappings
-func (s *Server) handleGetEntityMappingsRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleGetEntitiesMappingsRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("GetEntityMappings"),
+		otelogen.OperationID("GetEntitiesMappings"),
 		semconv.HTTPMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/entity_mappings"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "GetEntityMappings",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "GetEntitiesMappings",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -316,8 +316,8 @@ func (s *Server) handleGetEntityMappingsRequest(args [0]string, argsEscaped bool
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
-			OperationName: "GetEntityMappings",
-			OperationID:   "GetEntityMappings",
+			OperationName: "GetEntitiesMappings",
+			OperationID:   "GetEntitiesMappings",
 			Body:          nil,
 			Params:        middleware.Parameters{},
 			Raw:           r,
@@ -337,12 +337,12 @@ func (s *Server) handleGetEntityMappingsRequest(args [0]string, argsEscaped bool
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GetEntityMappings(ctx)
+				response, err = s.h.GetEntitiesMappings(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GetEntityMappings(ctx)
+		response, err = s.h.GetEntitiesMappings(ctx)
 	}
 	if err != nil {
 		recordError("Internal", err)
@@ -358,7 +358,7 @@ func (s *Server) handleGetEntityMappingsRequest(args [0]string, argsEscaped bool
 		return
 	}
 
-	if err := encodeGetEntityMappingsResponse(response, w, span); err != nil {
+	if err := encodeGetEntitiesMappingsResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
@@ -417,7 +417,7 @@ func (s *Server) handleGetRecordByIdRequest(args [2]string, argsEscaped bool, w 
 		return
 	}
 
-	var response *IdentifiedEntity
+	var response *IdentifiedRecord
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -440,7 +440,7 @@ func (s *Server) handleGetRecordByIdRequest(args [2]string, argsEscaped bool, w 
 		type (
 			Request  = struct{}
 			Params   = GetRecordByIdParams
-			Response = *IdentifiedEntity
+			Response = *IdentifiedRecord
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -531,7 +531,7 @@ func (s *Server) handleGetRecordsRequest(args [1]string, argsEscaped bool, w htt
 		return
 	}
 
-	var response *EntitiesResponse
+	var response *RecordsResponse
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -558,7 +558,7 @@ func (s *Server) handleGetRecordsRequest(args [1]string, argsEscaped bool, w htt
 		type (
 			Request  = struct{}
 			Params   = GetRecordsParams
-			Response = *EntitiesResponse
+			Response = *RecordsResponse
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -664,7 +664,7 @@ func (s *Server) handleUpdateRecordByIdRequest(args [2]string, argsEscaped bool,
 		}
 	}()
 
-	var response *IdentifiedEntity
+	var response *IdentifiedRecord
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:       ctx,
@@ -685,9 +685,9 @@ func (s *Server) handleUpdateRecordByIdRequest(args [2]string, argsEscaped bool,
 		}
 
 		type (
-			Request  = *Entity
+			Request  = *Record
 			Params   = UpdateRecordByIdParams
-			Response = *IdentifiedEntity
+			Response = *IdentifiedRecord
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

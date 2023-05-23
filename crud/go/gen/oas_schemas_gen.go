@@ -13,47 +13,6 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
-type EntitiesResponse struct {
-	TotalCount int                `json:"totalCount"`
-	Items      []IdentifiedEntity `json:"items"`
-}
-
-// GetTotalCount returns the value of TotalCount.
-func (s *EntitiesResponse) GetTotalCount() int {
-	return s.TotalCount
-}
-
-// GetItems returns the value of Items.
-func (s *EntitiesResponse) GetItems() []IdentifiedEntity {
-	return s.Items
-}
-
-// SetTotalCount sets the value of TotalCount.
-func (s *EntitiesResponse) SetTotalCount(val int) {
-	s.TotalCount = val
-}
-
-// SetItems sets the value of Items.
-func (s *EntitiesResponse) SetItems(val []IdentifiedEntity) {
-	s.Items = val
-}
-
-// Entity object.
-// Ref: #/components/schemas/Entity
-type Entity struct {
-	Data jx.Raw `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *Entity) GetData() jx.Raw {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *Entity) SetData(val jx.Raw) {
-	s.Data = val
-}
-
 // Entity mapping.
 // Ref: #/components/schemas/EntityMapping
 type EntityMapping struct {
@@ -209,30 +168,30 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-// Entity object with identifier.
-// Ref: #/components/schemas/IdentifiedEntity
-type IdentifiedEntity struct {
+// Record object with identifier.
+// Ref: #/components/schemas/IdentifiedRecord
+type IdentifiedRecord struct {
 	ID   string `json:"id"`
 	Data jx.Raw `json:"data"`
 }
 
 // GetID returns the value of ID.
-func (s *IdentifiedEntity) GetID() string {
+func (s *IdentifiedRecord) GetID() string {
 	return s.ID
 }
 
 // GetData returns the value of Data.
-func (s *IdentifiedEntity) GetData() jx.Raw {
+func (s *IdentifiedRecord) GetData() jx.Raw {
 	return s.Data
 }
 
 // SetID sets the value of ID.
-func (s *IdentifiedEntity) SetID(val string) {
+func (s *IdentifiedRecord) SetID(val string) {
 	s.ID = val
 }
 
 // SetData sets the value of Data.
-func (s *IdentifiedEntity) SetData(val jx.Raw) {
+func (s *IdentifiedRecord) SetData(val jx.Raw) {
 	s.Data = val
 }
 
@@ -329,4 +288,45 @@ func (o OptString) Or(d string) string {
 		return v
 	}
 	return d
+}
+
+// Record object.
+// Ref: #/components/schemas/Record
+type Record struct {
+	Data jx.Raw `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *Record) GetData() jx.Raw {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *Record) SetData(val jx.Raw) {
+	s.Data = val
+}
+
+type RecordsResponse struct {
+	TotalCount int64              `json:"totalCount"`
+	Items      []IdentifiedRecord `json:"items"`
+}
+
+// GetTotalCount returns the value of TotalCount.
+func (s *RecordsResponse) GetTotalCount() int64 {
+	return s.TotalCount
+}
+
+// GetItems returns the value of Items.
+func (s *RecordsResponse) GetItems() []IdentifiedRecord {
+	return s.Items
+}
+
+// SetTotalCount sets the value of TotalCount.
+func (s *RecordsResponse) SetTotalCount(val int64) {
+	s.TotalCount = val
+}
+
+// SetItems sets the value of Items.
+func (s *RecordsResponse) SetItems(val []IdentifiedRecord) {
+	s.Items = val
 }

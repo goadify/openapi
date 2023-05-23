@@ -16,7 +16,7 @@ import (
 )
 
 func (s *Server) decodeCreateRecordRequest(r *http.Request) (
-	req *Entity,
+	req *Record,
 	close func() error,
 	rerr error,
 ) {
@@ -55,7 +55,7 @@ func (s *Server) decodeCreateRecordRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request Entity
+		var request Record
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -79,7 +79,7 @@ func (s *Server) decodeCreateRecordRequest(r *http.Request) (
 }
 
 func (s *Server) decodeDeleteRecordByIdRequest(r *http.Request) (
-	req *Entity,
+	req *Record,
 	close func() error,
 	rerr error,
 ) {
@@ -118,7 +118,7 @@ func (s *Server) decodeDeleteRecordByIdRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request Entity
+		var request Record
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -142,7 +142,7 @@ func (s *Server) decodeDeleteRecordByIdRequest(r *http.Request) (
 }
 
 func (s *Server) decodeUpdateRecordByIdRequest(r *http.Request) (
-	req *Entity,
+	req *Record,
 	close func() error,
 	rerr error,
 ) {
@@ -181,7 +181,7 @@ func (s *Server) decodeUpdateRecordByIdRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request Entity
+		var request Record
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

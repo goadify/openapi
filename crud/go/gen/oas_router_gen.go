@@ -136,7 +136,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleGetEntityMappingsRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleGetEntitiesMappingsRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -314,9 +314,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						// Leaf: GetEntityMappings
-						r.name = "GetEntityMappings"
-						r.operationID = "GetEntityMappings"
+						// Leaf: GetEntitiesMappings
+						r.name = "GetEntitiesMappings"
+						r.operationID = "GetEntitiesMappings"
 						r.pathPattern = "/entity_mappings"
 						r.args = args
 						r.count = 0

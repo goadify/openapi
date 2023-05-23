@@ -7,7 +7,7 @@ info:
 paths:
   /entity_mappings:
     get:
-      operationId: GetEntityMappings
+      operationId: GetEntitiesMappings
       description: Returns a mappings of loaded entities
       responses:
         200:
@@ -22,12 +22,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/EntityName'
       requestBody:
-        $ref: '#/components/requestBodies/EntityRequest'
+        $ref: '#/components/requestBodies/RecordRequest'
       responses:
         201:
-          $ref: '#/components/responses/EntityResponse'
+          $ref: '#/components/responses/RecordResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+
     get:
       operationId: GetRecords
       description: Retrieves records with pagination
@@ -38,7 +39,7 @@ paths:
 
       responses:
         200:
-          $ref: '#/components/responses/EntitiesResponse'
+          $ref: '#/components/responses/RecordsResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
 
@@ -52,9 +53,10 @@ paths:
 
       responses:
         200:
-          $ref: '#/components/responses/EntityResponse'
+          $ref: '#/components/responses/RecordResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+
     put:
       operationId: UpdateRecordById
       description: Updates existing record
@@ -62,12 +64,13 @@ paths:
         - $ref: '#/components/parameters/EntityName'
         - $ref: '#/components/parameters/RecordId'
       requestBody:
-        $ref: '#/components/requestBodies/EntityRequest'
+        $ref: '#/components/requestBodies/RecordRequest'
       responses:
         200:
-          $ref: '#/components/responses/EntityResponse'
+          $ref: '#/components/responses/RecordResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
+
     delete:
       operationId: DeleteRecordById
       description: Deletes record
@@ -75,14 +78,12 @@ paths:
         - $ref: '#/components/parameters/EntityName'
         - $ref: '#/components/parameters/RecordId'
       requestBody:
-        $ref: '#/components/requestBodies/EntityRequest'
+        $ref: '#/components/requestBodies/RecordRequest'
       responses:
         204:
           $ref: '#/components/responses/NoContent'
         default:
           $ref: '#/components/responses/ErrorResponse'
-
-
 
 components:
   schemas:
@@ -101,22 +102,21 @@ components:
           type: string
           example: Well, I have tried, but nothing found
 
-    Entity:
+    Record:
       type: object
-      description: Entity object
+      description: Record object
       required: [ data ]
       properties:
-        data: {}
+        data: { }
 
-    IdentifiedEntity:
+    IdentifiedRecord:
       type: object
-      description: Entity object with identifier
+      description: Record object with identifier
       required: [ id, data ]
       properties:
         id:
           type: string
         data: { }
-
 
     EntityMapping:
       description: Entity mapping
@@ -140,13 +140,15 @@ components:
                   - string
                   - integer
                   - float
+
   requestBodies:
-    EntityRequest:
+    RecordRequest:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Entity'
+            $ref: '#/components/schemas/Record'
+
   responses:
     ErrorResponse:
       description: Error response
@@ -155,15 +157,15 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
 
-    EntityResponse:
-      description: Entity response
+    RecordResponse:
+      description: Record response
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/IdentifiedEntity'
+            $ref: '#/components/schemas/IdentifiedRecord'
 
-    EntitiesResponse:
-      description: Set of entities response
+    RecordsResponse:
+      description: Set of records response
       content:
         application/json:
           schema:
@@ -172,10 +174,11 @@ components:
             properties:
               totalCount:
                 type: integer
+                format: int64
               items:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IdentifiedEntity'
+                  $ref: '#/components/schemas/IdentifiedRecord'
 
     EntityMappingsResponse:
       description: Mappings of entities
@@ -185,6 +188,7 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/EntityMapping'
+
     NoContent:
       description: No content
 

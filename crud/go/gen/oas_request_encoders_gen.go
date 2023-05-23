@@ -12,7 +12,7 @@ import (
 )
 
 func encodeCreateRecordRequest(
-	req *Entity,
+	req *Record,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -26,7 +26,7 @@ func encodeCreateRecordRequest(
 }
 
 func encodeDeleteRecordByIdRequest(
-	req *Entity,
+	req *Record,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -40,7 +40,7 @@ func encodeDeleteRecordByIdRequest(
 }
 
 func encodeUpdateRecordByIdRequest(
-	req *Entity,
+	req *Record,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

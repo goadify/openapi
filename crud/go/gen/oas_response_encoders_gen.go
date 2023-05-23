@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeCreateRecordResponse(response *IdentifiedEntity, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateRecordResponse(response *IdentifiedRecord, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(201)
 	span.SetStatus(codes.Ok, http.StatusText(201))
@@ -31,7 +31,7 @@ func encodeDeleteRecordByIdResponse(response *NoContent, w http.ResponseWriter, 
 	return nil
 }
 
-func encodeGetEntityMappingsResponse(response []EntityMapping, w http.ResponseWriter, span trace.Span) error {
+func encodeGetEntitiesMappingsResponse(response []EntityMapping, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -48,7 +48,7 @@ func encodeGetEntityMappingsResponse(response []EntityMapping, w http.ResponseWr
 	return nil
 }
 
-func encodeGetRecordByIdResponse(response *IdentifiedEntity, w http.ResponseWriter, span trace.Span) error {
+func encodeGetRecordByIdResponse(response *IdentifiedRecord, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -61,7 +61,7 @@ func encodeGetRecordByIdResponse(response *IdentifiedEntity, w http.ResponseWrit
 	return nil
 }
 
-func encodeGetRecordsResponse(response *EntitiesResponse, w http.ResponseWriter, span trace.Span) error {
+func encodeGetRecordsResponse(response *RecordsResponse, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -74,7 +74,7 @@ func encodeGetRecordsResponse(response *EntitiesResponse, w http.ResponseWriter,
 	return nil
 }
 
-func encodeUpdateRecordByIdResponse(response *IdentifiedEntity, w http.ResponseWriter, span trace.Span) error {
+func encodeUpdateRecordByIdResponse(response *IdentifiedRecord, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))

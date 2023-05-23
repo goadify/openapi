@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Creates record.
 //
 // POST /entity/{name}
-func (UnimplementedHandler) CreateRecord(ctx context.Context, req *Entity, params CreateRecordParams) (r *IdentifiedEntity, _ error) {
+func (UnimplementedHandler) CreateRecord(ctx context.Context, req *Record, params CreateRecordParams) (r *IdentifiedRecord, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -27,16 +27,16 @@ func (UnimplementedHandler) CreateRecord(ctx context.Context, req *Entity, param
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (UnimplementedHandler) DeleteRecordById(ctx context.Context, req *Entity, params DeleteRecordByIdParams) error {
+func (UnimplementedHandler) DeleteRecordById(ctx context.Context, req *Record, params DeleteRecordByIdParams) error {
 	return ht.ErrNotImplemented
 }
 
-// GetEntityMappings implements GetEntityMappings operation.
+// GetEntitiesMappings implements GetEntitiesMappings operation.
 //
 // Returns a mappings of loaded entities.
 //
 // GET /entity_mappings
-func (UnimplementedHandler) GetEntityMappings(ctx context.Context) (r []EntityMapping, _ error) {
+func (UnimplementedHandler) GetEntitiesMappings(ctx context.Context) (r []EntityMapping, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -45,7 +45,7 @@ func (UnimplementedHandler) GetEntityMappings(ctx context.Context) (r []EntityMa
 // Retrieves one record by identifier.
 //
 // GET /entity/{name}/{id}
-func (UnimplementedHandler) GetRecordById(ctx context.Context, params GetRecordByIdParams) (r *IdentifiedEntity, _ error) {
+func (UnimplementedHandler) GetRecordById(ctx context.Context, params GetRecordByIdParams) (r *IdentifiedRecord, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -54,7 +54,7 @@ func (UnimplementedHandler) GetRecordById(ctx context.Context, params GetRecordB
 // Retrieves records with pagination.
 //
 // GET /entity/{name}
-func (UnimplementedHandler) GetRecords(ctx context.Context, params GetRecordsParams) (r *EntitiesResponse, _ error) {
+func (UnimplementedHandler) GetRecords(ctx context.Context, params GetRecordsParams) (r *RecordsResponse, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,7 +63,7 @@ func (UnimplementedHandler) GetRecords(ctx context.Context, params GetRecordsPar
 // Updates existing record.
 //
 // PUT /entity/{name}/{id}
-func (UnimplementedHandler) UpdateRecordById(ctx context.Context, req *Entity, params UpdateRecordByIdParams) (r *IdentifiedEntity, _ error) {
+func (UnimplementedHandler) UpdateRecordById(ctx context.Context, req *Record, params UpdateRecordByIdParams) (r *IdentifiedRecord, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
