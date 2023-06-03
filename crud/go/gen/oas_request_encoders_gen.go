@@ -25,20 +25,6 @@ func encodeCreateRecordRequest(
 	return nil
 }
 
-func encodeDeleteRecordByIdRequest(
-	req *Record,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := jx.GetEncoder()
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeUpdateRecordByIdRequest(
 	req *Record,
 	r *http.Request,

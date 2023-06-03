@@ -168,13 +168,13 @@ func (c *Client) sendCreateRecord(ctx context.Context, request *Record, params C
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (c *Client) DeleteRecordById(ctx context.Context, request *Record, params DeleteRecordByIdParams) error {
-	res, err := c.sendDeleteRecordById(ctx, request, params)
+func (c *Client) DeleteRecordById(ctx context.Context, params DeleteRecordByIdParams) error {
+	res, err := c.sendDeleteRecordById(ctx, params)
 	_ = res
 	return err
 }
 
-func (c *Client) sendDeleteRecordById(ctx context.Context, request *Record, params DeleteRecordByIdParams) (res *NoContent, err error) {
+func (c *Client) sendDeleteRecordById(ctx context.Context, params DeleteRecordByIdParams) (res *NoContent, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("DeleteRecordById"),
 	}
@@ -252,9 +252,6 @@ func (c *Client) sendDeleteRecordById(ctx context.Context, request *Record, para
 	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeDeleteRecordByIdRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"

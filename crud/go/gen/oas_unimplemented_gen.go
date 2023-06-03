@@ -27,7 +27,7 @@ func (UnimplementedHandler) CreateRecord(ctx context.Context, req *Record, param
 // Deletes record.
 //
 // DELETE /entity/{name}/{id}
-func (UnimplementedHandler) DeleteRecordById(ctx context.Context, req *Record, params DeleteRecordByIdParams) error {
+func (UnimplementedHandler) DeleteRecordById(ctx context.Context, params DeleteRecordByIdParams) error {
 	return ht.ErrNotImplemented
 }
 

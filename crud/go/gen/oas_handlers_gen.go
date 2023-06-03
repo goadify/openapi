@@ -196,21 +196,6 @@ func (s *Server) handleDeleteRecordByIdRequest(args [2]string, argsEscaped bool,
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	request, close, err := s.decodeDeleteRecordByIdRequest(r)
-	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		recordError("DecodeRequest", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response *NoContent
 	if m := s.cfg.Middleware; m != nil {
@@ -218,7 +203,7 @@ func (s *Server) handleDeleteRecordByIdRequest(args [2]string, argsEscaped bool,
 			Context:       ctx,
 			OperationName: "DeleteRecordById",
 			OperationID:   "DeleteRecordById",
-			Body:          request,
+			Body:          nil,
 			Params: middleware.Parameters{
 				{
 					Name: "name",
@@ -233,7 +218,7 @@ func (s *Server) handleDeleteRecordByIdRequest(args [2]string, argsEscaped bool,
 		}
 
 		type (
-			Request  = *Record
+			Request  = struct{}
 			Params   = DeleteRecordByIdParams
 			Response = *NoContent
 		)
@@ -246,12 +231,12 @@ func (s *Server) handleDeleteRecordByIdRequest(args [2]string, argsEscaped bool,
 			mreq,
 			unpackDeleteRecordByIdParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.DeleteRecordById(ctx, request, params)
+				err = s.h.DeleteRecordById(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.DeleteRecordById(ctx, request, params)
+		err = s.h.DeleteRecordById(ctx, params)
 	}
 	if err != nil {
 		recordError("Internal", err)

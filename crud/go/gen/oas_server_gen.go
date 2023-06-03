@@ -19,7 +19,7 @@ type Handler interface {
 	// Deletes record.
 	//
 	// DELETE /entity/{name}/{id}
-	DeleteRecordById(ctx context.Context, req *Record, params DeleteRecordByIdParams) error
+	DeleteRecordById(ctx context.Context, params DeleteRecordByIdParams) error
 	// GetEntitiesMappings implements GetEntitiesMappings operation.
 	//
 	// Returns a mappings of loaded entities.
