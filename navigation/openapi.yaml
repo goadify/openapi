@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: Navigation module API
+  description: Navigation module API
+  version: 1.0.0
+
+paths:
+  /navigators:
+    get:
+      operationId: GetNavigators
+      responses:
+        200:
+          $ref: '#/components/responses/NavigatorsResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+
+
+components:
+  schemas:
+    Error:
+      description: Error schema
+      type: object
+      required: [ code,message ]
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not found
+        display_message:
+          type: string
+          example: Well, I have tried, but nothing found
+
+    Link:
+      type: object
+      required: [ title, module_name, identifier ]
+      properties:
+        title:
+          type: string
+          example: User
+        module_name:
+          type: string
+          example: crud
+        identifier:
+          type: string
+          example: user
+
+    Group:
+      type: object
+      required: [ title, links ]
+      properties:
+        title:
+          type: string
+          example: User section
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+
+    Navigators:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/Link'
+          - $ref: '#/components/schemas/Group'
+
+  responses:
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NavigatorsResponse:
+      description: Set of navigators (links or groups)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Navigators'
+
