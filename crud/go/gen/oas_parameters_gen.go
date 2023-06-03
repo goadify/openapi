@@ -326,9 +326,9 @@ type GetRecordsParams struct {
 	// Entity name.
 	Name string
 	// Selected page.
-	Page OptInt
+	Page OptInt64
 	// Items per page.
-	PerPage OptInt
+	PerPage OptInt64
 }
 
 func unpackGetRecordsParams(packed middleware.Parameters) (params GetRecordsParams) {
@@ -345,7 +345,7 @@ func unpackGetRecordsParams(packed middleware.Parameters) (params GetRecordsPara
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Page = v.(OptInt)
+			params.Page = v.(OptInt64)
 		}
 	}
 	{
@@ -354,7 +354,7 @@ func unpackGetRecordsParams(packed middleware.Parameters) (params GetRecordsPara
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.PerPage = v.(OptInt)
+			params.PerPage = v.(OptInt64)
 		}
 	}
 	return params
@@ -409,7 +409,7 @@ func decodeGetRecordsParams(args [1]string, argsEscaped bool, r *http.Request) (
 	}
 	// Set default value for query: page.
 	{
-		val := int(1)
+		val := int64(1)
 		params.Page.SetTo(val)
 	}
 	// Decode query: page.
@@ -422,14 +422,14 @@ func decodeGetRecordsParams(args [1]string, argsEscaped bool, r *http.Request) (
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPageVal int
+				var paramsDotPageVal int64
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt(val)
+					c, err := conv.ToInt64(val)
 					if err != nil {
 						return err
 					}
@@ -455,7 +455,7 @@ func decodeGetRecordsParams(args [1]string, argsEscaped bool, r *http.Request) (
 	}
 	// Set default value for query: per-page.
 	{
-		val := int(20)
+		val := int64(20)
 		params.PerPage.SetTo(val)
 	}
 	// Decode query: per-page.
@@ -468,14 +468,14 @@ func decodeGetRecordsParams(args [1]string, argsEscaped bool, r *http.Request) (
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPerPageVal int
+				var paramsDotPerPageVal int64
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt(val)
+					c, err := conv.ToInt64(val)
 					if err != nil {
 						return err
 					}

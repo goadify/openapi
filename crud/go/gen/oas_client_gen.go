@@ -528,7 +528,7 @@ func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (r
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
+				return e.EncodeValue(conv.Int64ToString(val))
 			}
 			return nil
 		}); err != nil {
@@ -545,7 +545,7 @@ func (c *Client) sendGetRecords(ctx context.Context, params GetRecordsParams) (r
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
 			if val, ok := params.PerPage.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
+				return e.EncodeValue(conv.Int64ToString(val))
 			}
 			return nil
 		}); err != nil {
