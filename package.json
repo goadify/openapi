@@ -1,8 +1,12 @@
 {
-  "name": "openapi",
+  "name": "@goadify/openapi",
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
     "axios": "^1.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goadify/openapi.git"
   }
 }
